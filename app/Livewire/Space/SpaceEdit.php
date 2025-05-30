@@ -26,12 +26,12 @@ class SpaceEdit extends Component
 
     public function update()
     {
-        try {
-            $this->validate([
-                'name' => 'required|string|max:255',
-                'location' => 'required|string|max:255'
-            ]);
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255'
+        ]);
 
+        try {
             $this->space->update([
                 'name' => $this->name,
                 'location' => $this->location

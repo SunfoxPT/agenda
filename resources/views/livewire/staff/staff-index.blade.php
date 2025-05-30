@@ -34,3 +34,10 @@
         </x-table>
     </x-card>
 </div>
+@if ($successMessage)
+    <script>
+        window.addEventListener('load', () => {
+            alert(@js($successMessage));
+        });
+    </script>
+@endif

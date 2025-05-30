@@ -47,19 +47,20 @@ class ServiceIndex extends Component
 
     public function createService(Request $request)
     {
+        $this->validate([
+            'name' => 'required',
+            'description' => 'nullable|string',
+            'spaceInputs.*.space_id' => 'required|exists:spaces,id',
+            'spaceInputs.*.price' => 'required|numeric|min:0',
+            'spaceInputs.*.commission_percentage' => 'required|numeric|min:0|max:100',
+        ], [
+            'name.required' => 'The name field is required.',
+            'spaceInputs.*.space_id.required' => 'Please select a space for the service.',
+            'spaceInputs.*.price.required' => 'The price field is required.',
+            'spaceInputs.*.commission_percentage.required' => 'The commission percentage field is required.',
+        ]);
+        
         try {
-            $this->validate([
-                'name' => 'required',
-                'description' => 'nullable|string',
-                'spaceInputs.*.space_id' => 'required|exists:spaces,id',
-                'spaceInputs.*.price' => 'required|numeric|min:0',
-                'spaceInputs.*.commission_percentage' => 'required|numeric|min:0|max:100',
-            ], [
-                'name.required' => 'The name field is required.',
-                'spaceInputs.*.space_id.required' => 'Please select a space for the service.',
-                'spaceInputs.*.price.required' => 'The price field is required.',
-                'spaceInputs.*.commission_percentage.required' => 'The commission percentage field is required.',
-            ]);
 
             $service = Service::create([
                 'name' => $this->name,

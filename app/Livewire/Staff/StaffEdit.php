@@ -32,22 +32,21 @@ class StaffEdit extends Component
 
     public function update()
     {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'required',
+            'email' => 'required|email',
+            'services_staff' => 'required|array',
+        ],
+        [
+            'name.required' => 'Name is required.',
+            'role.required' => 'Role is required.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Email must be a valid email address.',
+            'services_staff.required' => 'At least one service must be selected.',
+        ]);
+
         try {
-
-            $this->validate([
-                'name' => 'required|string|max:255',
-                'role' => 'required',
-                'email' => 'required|email',
-                'services_staff' => 'required|array',
-            ],
-            [
-                'name.required' => 'Name is required.',
-                'role.required' => 'Role is required.',
-                'email.required' => 'Email is required.',
-                'email.email' => 'Email must be a valid email address.',
-                'services_staff.required' => 'At least one service must be selected.',
-            ]);
-
             $this->staff->update([
                 'name' => $this->name,
                 'role' => $this->role,

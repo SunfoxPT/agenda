@@ -24,6 +24,7 @@ class StaffIndex extends Component
     ];
 
     public bool $ModalStaff = false;
+    public string|null $successMessage = null;
 
     public function mount()
     {
@@ -33,7 +34,12 @@ class StaffIndex extends Component
 
     public function render()
     {
+        if (session()->has('success')) {
+            $this->successMessage = session('success');
+        }
+        
         return view('livewire.staff.staff-index');
+       
     }
 
     public function edit($id)
@@ -43,23 +49,21 @@ class StaffIndex extends Component
 
     public function createStaff(Request $request)
     {
-
+        $this->validate([
+            'name' => 'required',
+            'role' => 'required',
+            'email' => 'required|email',
+            'services_staff' => 'required|array',
+        ],
+        [
+            'name.required' => 'The name field is required.',
+            'role.required' => 'The role field is required.',
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
+            'services_staff.required' => 'Please select at least one service for the staff.',
+        ]);
+        
         try {
-
-            $this->validate([
-                'name' => 'required',
-                'role' => 'required',
-                'email' => 'required|email',
-                'services_staff' => 'required|array',
-            ],
-            [
-                'name.required' => 'The name field is required.',
-                'role.required' => 'The role field is required.',
-                'email.required' => 'The email field is required.',
-                'email.email' => 'The email must be a valid email address.',
-                'services_staff.required' => 'Please select at least one service for the staff.',
-            ]);
-
             $staff = Staff::create([
                 'name' => $this->name,
                 'role' => $this->role,

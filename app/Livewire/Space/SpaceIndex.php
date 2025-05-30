@@ -32,13 +32,12 @@ class SpaceIndex extends Component
 
     public function createSpace(Request $request)
     {
-
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255'
+        ]);
+        
         try {
-
-            $this->validate([
-                'name' => 'required|string|max:255',
-                'location' => 'required|string|max:255'
-            ]);
 
             Space::create([
                 'name' => $this->name,
