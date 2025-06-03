@@ -3,9 +3,12 @@
 namespace App\Livewire\Space;
 
 use App\Models\Space;
+use App\Models\Service;
+use App\Models\Appointment;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Mary\Traits\Toast;
+use Illuminate\Support\Facades\DB;
 
 class SpaceIndex extends Component
 {
@@ -59,7 +62,11 @@ class SpaceIndex extends Component
     public function delete($id)
     {
         try {
-            $space = Space::findOrFail($id)->delete();
+            $space = Space::findOrFail($id);
+            $space->appointments()->delete();
+            DB::table('space_service_prices')->where('space_id', $space->id)->delete();
+            $space->delete();
+
             $this->mount();
             $this->success('Space deleted successfully!');
 

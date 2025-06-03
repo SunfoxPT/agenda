@@ -3,7 +3,7 @@
         <x-form wire:submit="update" class="space-y-6">
 
             <div class="border border-base-300 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <x-icon name="o-user-circle" class="text-primary" />
                     Client Information
                 </h3>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="border border-base-300 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <x-icon name="o-calendar-days" class="text-primary" />
                     Appointment Information
                 </h3>
@@ -29,7 +29,7 @@
                 <div class="divider divider-primary"></div>
        
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                    <h3 class="text-lg font-semibold flex items-center gap-2">
                         <x-icon name="o-squares-plus" class="text-primary" />
                         Services
                     </h3>
@@ -105,7 +105,7 @@
             </div>
 
             <div class="border border-base-300 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <x-icon name="o-map-pin" class="text-primary" />
                     Location Information
                 </h3>

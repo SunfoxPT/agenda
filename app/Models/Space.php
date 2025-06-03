@@ -18,6 +18,8 @@ class Space extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'space_service');
+        return $this->belongsToMany(Service::class, 'space_service_prices')
+                    ->withPivot('price', 'commission_percentage')
+                    ->withTimestamps();
     }
 }

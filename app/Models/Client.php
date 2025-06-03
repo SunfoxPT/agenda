@@ -11,7 +11,7 @@ class Client extends Model
         'name',
         'email',
         'phone',
-        'address',
+        'vat_number',
     ];
 
     public function appointments(): HasMany

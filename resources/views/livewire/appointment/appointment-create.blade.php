@@ -3,10 +3,13 @@
         <x-form wire:submit="create" class="space-y-6">
 
             <div class="border border-base-300 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <x-icon name="o-user-circle" class="text-primary" />
                     Client Information
                 </h3>
+                @if(clients()->count() == 0)
+                    <x-alert title="No clients available." icon="o-exclamation-triangle" class="alert-warning" />
+                @else
                 <div class="grid grid-cols-1">
                     <fieldset class="fieldset p-0">
                         <legend class="fieldset-legend">Client</legend>
@@ -22,6 +25,8 @@
                         </select>	
                     </fieldset>
                 </div>
+                @endif
+                
                 @isset($selectedClient)
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <x-input label="Client Name" icon="o-user" value="{{ $selectedClient->name }}" readonly />
@@ -33,7 +38,7 @@
             </div>
 
             <div class="border border-base-300 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <x-icon name="o-calendar-days" class="text-primary" />
                     Appointment Information
                 </h3>
@@ -68,9 +73,10 @@
                 @endisset
             </div>
 
-            @isset($selectedSpace)
+            @if(isset($selectedSpace))
+                @if(count($services) > 0)
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                    <h3 class="text-lg font-semibold flex items-center gap-2">
                         <x-icon name="o-squares-plus" class="text-primary" />
                         Services
                     </h3>
@@ -143,7 +149,12 @@
                     </x-card>
                 @endforeach
                 </div>
-            @endisset
+                @else
+                    <x-alert title="No services available for this space." icon="o-exclamation-triangle" class="alert-warning" />
+                @endif
+            @else
+                <x-alert title="Please select a space to add services." icon="o-exclamation-triangle" class="alert-warning" />
+            @endif
 
             <x-errors title="Oops!" description="Please fix the issues below." icon="o-face-frown" />
             <x-slot:actions>

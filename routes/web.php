@@ -11,7 +11,10 @@ use App\Livewire\Space\SpaceEdit;
 use App\Livewire\Appointment\AppointmentIndex;
 use App\Livewire\Appointment\AppointmentEdit;	
 use App\Livewire\Appointment\AppointmentCreate;	
-use App\Livewire\Auth\login;
+use App\Livewire\Appointment\BusinessHours;	
+use App\Livewire\Client\ClientIndex;
+use App\Livewire\Client\ClientEdit;
+use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\VerifyEmail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -19,7 +22,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', Welcome::class);
 
-Route::get('/login', login::class)->name('login');
+Route::get('/login', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');
 Route::get('/logout', function () {
     auth()->logout();
@@ -55,6 +58,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('appointments', AppointmentIndex::class)->name('admin.appointments');
             Route::get('appointments/{appointment}/edit', AppointmentEdit::class)->name('admin.appointments.edit');
             Route::get('appointments/create', AppointmentCreate::class)->name('admin.appointments.create');
+            Route::post('appointments/{appointment}/UpdateDragAndDrop', [AppointmentIndex::class, 'UpdateDragAndDrop'])->name('admin.appointments.UpdateDragAndDrop');
+            Route::get('business-hours', BusinessHours::class)->name('admin.business-hours');
+            Route::get('clients', ClientIndex::class)->name('admin.clients');
+            Route::get('clients/{client}/edit', ClientEdit::class)->name('admin.clients.edit');
         });
     });
 });

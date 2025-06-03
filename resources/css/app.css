@@ -77,3 +77,7 @@
 .mary-table-pagination button {
     @apply cursor-pointer
 }
+
+.w-10{
+    width: calc(var(--spacing) * 10);
+}

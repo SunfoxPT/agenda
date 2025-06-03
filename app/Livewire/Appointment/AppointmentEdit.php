@@ -128,7 +128,7 @@ class AppointmentEdit extends Component
         $this->serviceItems[$index]['staff_id'] = $staffSelectedId;
     }
 
-   public function removeService($index)
+    public function removeService($index)
     {
         $this->validate([
             'client.id' => 'required|exists:clients,id',

@@ -4,7 +4,9 @@
     @include('partials.head')
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200">
-
+    <div id="progress" class="fixed inset-0 z-50 bg-base-300/60 flex items-center justify-center hidden">
+        <span class="loading loading-spinner w-10 text-primary"></span>
+    </div>
     {{-- NAVBAR mobile only --}}
     <x-nav sticky class="lg:hidden">
         <x-slot:brand>
@@ -44,14 +46,21 @@
                     <x-menu-separator />
                 @endif
 
-                <x-menu-item title="Staffs" icon="o-user" link="{{ route('admin.staffs') }}" />
-                <x-menu-item title="Services" icon="o-sparkles" link="{{ route('admin.services') }}" />
-                <x-menu-item title="Spaces" icon="o-home" link="{{ route('admin.spaces') }}" />
-                
-                <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />
+                <x-menu-sub title="Team" icon="o-user-group">
+                    <x-menu-item title="Staffs" icon="o-user" link="{{ route('admin.staffs') }}" />
+                    <x-menu-item title="Clients" icon="o-user-group" link="{{ route('admin.clients') }}" />
                 </x-menu-sub>
+
+                <x-menu-sub title="Resources" icon="o-sparkles">
+                    <x-menu-item title="Services" icon="o-sparkles" link="{{ route('admin.services') }}" />
+                    <x-menu-item title="Spaces" icon="o-home" link="{{ route('admin.spaces') }}" />
+                </x-menu-sub>
+
+                <x-menu-sub title="Calendar" icon="o-calendar-days">
+                    <x-menu-item title="Appointments" icon="o-calendar" link="{{ route('admin.appointments') }}" />
+                    <x-menu-item title="Business Hours" icon="o-clock" link="{{ route('admin.business-hours') }}" />
+                </x-menu-sub>
+
             </x-menu>
         </x-slot:sidebar>
 
