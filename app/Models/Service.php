@@ -20,4 +20,10 @@ class Service extends Model
                     ->withPivot('price', 'commission_percentage')
                     ->withTimestamps();
     }
+
+    public function staff()
+    {
+        return $this->belongsToMany(Staff::class, 'service_staff', 'service_id', 'staff_id')
+                    ->withTimestamps();
+    }
 }

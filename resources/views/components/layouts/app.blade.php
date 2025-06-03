@@ -64,5 +64,6 @@
     {{--  TOAST area --}}
     <x-toast />  
     <x-errors title="Oops!" description="Please fix the issues below." icon="o-face-frown" />
+    @livewireScripts
 </body>
 </html>

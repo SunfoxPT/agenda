@@ -8,10 +8,14 @@ use App\Livewire\Service\ServiceIndex;
 use App\Livewire\Service\ServiceEdit;
 use App\Livewire\Space\SpaceIndex;
 use App\Livewire\Space\SpaceEdit;
+use App\Livewire\Appointment\AppointmentIndex;
+use App\Livewire\Appointment\AppointmentEdit;	
+use App\Livewire\Appointment\AppointmentCreate;	
 use App\Livewire\Auth\login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\VerifyEmail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
 
 Route::get('/', Welcome::class);
 
@@ -48,6 +52,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('services/{id}/edit', ServiceEdit::class)->name('admin.services.edit');
             Route::get('spaces', SpaceIndex::class)->name('admin.spaces');
             Route::get('spaces/{id}/edit', SpaceEdit::class)->name('admin.spaces.edit');
+            Route::get('appointments', AppointmentIndex::class)->name('admin.appointments');
+            Route::get('appointments/{appointment}/edit', AppointmentEdit::class)->name('admin.appointments.edit');
+            Route::get('appointments/create', AppointmentCreate::class)->name('admin.appointments.create');
         });
     });
 });
