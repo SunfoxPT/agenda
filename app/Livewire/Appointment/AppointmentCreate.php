@@ -6,10 +6,12 @@ use Livewire\Component;
 use App\Models\Appointment;
 use App\Models\AppointmentServiceItem;
 use App\Models\Client;
+use App\Models\BusinessHour;
 use App\Models\Space;
 use App\Models\Service;
 use App\Models\Staff;
 use Mary\Traits\Toast;
+use Carbon\Carbon;
 
 class AppointmentCreate extends Component
 {
@@ -62,18 +64,34 @@ class AppointmentCreate extends Component
             'serviceItems.*.commission_percentage' => 'required|numeric|min:0|max:100',
         ]);
 
-        /*$conflictingAppointment = Appointment::where('space_id', $this->selectedSpace)
-            ->where(function ($query) {
-                $query->where('end_at', '>', $this->time_start)
-                    ->where('scheduled_at', '<', $this->time_end);
-            })
-            ->first();
+        foreach ($this->serviceItems as $index => $item) {
+            if ($item['staff_id']) {
+                $conflict = $this->checkStaffScheduleConflict($item['staff_id'], $this->time_start, $this->time_end);
 
-        if ($conflictingAppointment) {
-            $spaceName = $conflictingAppointment->space->name ?? 'espaço selecionado';
-            $this->addError('time_start', "Já existe um agendamento no horário para o espaço: {$spaceName} (ID: {$conflictingAppointment->space_id}).");
+                if ($conflict['status']) {
+                    $this->addError("serviceItems.{$index}.staff_id", $conflict['message']);
+                    return;
+                }
+            }
+        }
+
+        $scheduledAt = Carbon::parse($this->time_start);
+        $endAt = Carbon::parse($this->time_end);
+
+        $dayOfWeek = $scheduledAt->dayOfWeek;
+
+        $businessHours = BusinessHour::where('day_of_week', $dayOfWeek)->get();
+
+        $isWithinBusinessHours = $businessHours->contains(function ($slot) use ($scheduledAt, $endAt) {
+            return
+                $scheduledAt->format('H:i') >= Carbon::parse($slot->start_time)->format('H:i') &&
+                $endAt->format('H:i') <= Carbon::parse($slot->end_time)->format('H:i');
+        });
+
+        if (! $isWithinBusinessHours) {
+            $this->error('The selected time is outside of business hours for that day.');
             return;
-        }*/
+        }
 
         try {
             $this->appointment->fill([
@@ -85,7 +103,7 @@ class AppointmentCreate extends Component
             $this->appointment->save();
         
         } catch (\Exception $e) {
-            $this->addError('appointment', 'Failed to create appointment: ' . $e->getMessage());
+            $this->error('Failed to create appointment: ' . $e->getMessage());
             return;
         }
 
@@ -103,7 +121,7 @@ class AppointmentCreate extends Component
                 }
             }
         } catch (\Exception $e) {
-            $this->addError('service_items', 'Failed to create service items: ' . $e->getMessage());
+            $this->error('Failed to create service items: ' . $e->getMessage());
             return;
         }
 
@@ -120,6 +138,39 @@ class AppointmentCreate extends Component
             return $service->spaces->contains($this->selectedSpace);
         })->values();
     }
+
+    protected function checkStaffScheduleConflict($staffId, $start, $end)
+    {
+        $conflictingServiceItem = AppointmentServiceItem::where('staff_id', $staffId)
+            ->whereHas('appointment', function ($query) use ($start, $end) {
+                $query->where(function ($q) use ($start, $end) {
+                    $q->whereBetween('scheduled_at', [$start, $end])
+                    ->orWhereBetween('end_at', [$start, $end])
+                    ->orWhere(function ($q2) use ($start, $end) {
+                        $q2->where('scheduled_at', '<=', $start)
+                            ->where('end_at', '>=', $end);
+                    });
+                });
+            })
+            ->with('appointment.client')
+            ->first();
+
+        if ($conflictingServiceItem) {
+            $appointment = $conflictingServiceItem->appointment;
+            $staff = Staff::find($staffId);
+
+            return [
+                'status' => true,
+                'appointment' => $appointment,
+                'message' => "The staff member \"{$staff->name}\" is already booked during this time for client \"{$appointment->client->name}\" from " .
+                    Carbon::parse($appointment->scheduled_at)->format('M d, Y H:i') . " to " .
+                    Carbon::parse($appointment->end_at)->format('H:i') . "."
+            ];
+        }
+
+        return ['status' => false];
+    }
+
 
     protected function updateServiceItemsForNewSpace()
     {

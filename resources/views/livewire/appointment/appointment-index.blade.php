@@ -13,7 +13,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = $('#calendar');
-
+            console.log(calendarEl.length);
             if (calendarEl.length) {
                 const calendar = new Calendar(calendarEl[0], {
                     plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
@@ -27,7 +27,7 @@
                     },
                     customButtons: {
                         createEventButton: {
-                            text: 'Novo Evento',
+                            text: 'New Event',
                             click: function () {
                                 const url = '{{ route("admin.appointments.create") }}';
                                 window.open(url, '_blank');

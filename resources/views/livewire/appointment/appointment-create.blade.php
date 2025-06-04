@@ -7,7 +7,7 @@
                     <x-icon name="o-user-circle" class="text-primary" />
                     Client Information
                 </h3>
-                @if(clients()->count() == 0)
+                @if($clients->count() === 0)
                     <x-alert title="No clients available." icon="o-exclamation-triangle" class="alert-warning" />
                 @else
                 <div class="grid grid-cols-1">
@@ -75,6 +75,7 @@
 
             @if(isset($selectedSpace))
                 @if(count($services) > 0)
+                <div class="border border-base-300 p-4 rounded-lg">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold flex items-center gap-2">
                         <x-icon name="o-squares-plus" class="text-primary" />
@@ -148,6 +149,7 @@
                         </div>
                     </x-card>
                 @endforeach
+                </div>
                 </div>
                 @else
                     <x-alert title="No services available for this space." icon="o-exclamation-triangle" class="alert-warning" />

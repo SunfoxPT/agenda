@@ -73,6 +73,7 @@
     {{--  TOAST area --}}
     <x-toast />  
     <x-errors title="Oops!" description="Please fix the issues below." icon="o-face-frown" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     @livewireScripts
 </body>
 </html>

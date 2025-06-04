@@ -17,8 +17,8 @@ use App\Livewire\Client\ClientEdit;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\VerifyEmail;
+use App\Livewire\Dashboard\ChartIndex;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
 
 Route::get('/', Welcome::class);
 
@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['verified'])->group(function () {
         Route::prefix('admin')->group(function () {
+            Route::get('dashboard', ChartIndex::class)->name('admin.dashboard');
             Route::get('staffs', StaffIndex::class)->name('admin.staffs');
             Route::get('staffs/{id}/edit', StaffEdit::class)->name('admin.staffs.edit');
             Route::get('services', ServiceIndex::class)->name('admin.services');
