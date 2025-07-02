@@ -20,8 +20,6 @@ use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Dashboard\ChartIndex;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-Route::get('/', Welcome::class);
-
 Route::get('/login', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');
 Route::get('/logout', function () {
@@ -40,6 +38,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/', Welcome::class);
     Route::get('/email/verify', VerifyEmail::class)->name('verification.notice');
 
     Route::post('/email/resend', function (Request $request) {

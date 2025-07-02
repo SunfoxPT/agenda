@@ -139,6 +139,42 @@ class AppointmentCreate extends Component
         })->values();
     }
 
+    public function removeService($index)
+    {
+        $this->validate([
+            'client.id' => 'required|exists:clients,id',
+            'space.id' => 'required|exists:spaces,id',          
+        ]);
+
+        if (!isset($this->serviceItems[$index])) {
+            $this->error('Item de serviço não encontrado.');
+            return;
+        }
+
+        if (count($this->serviceItems) <= 1) {
+            $this->error('Deve haver pelo menos um serviço.');
+            return;
+        }
+
+        if (isset($this->serviceItems[$index]['id'])) {
+            try {
+               AppointmentServiceItem::where('id', $this->serviceItems[$index]['id'])->delete();
+            } catch (\Exception $e) {
+                $this->error('Erro ao remover o serviço: ' . $e->getMessage());
+                return;
+            }
+            
+        }
+
+        unset($this->availableStaffList[$index]);
+        unset($this->serviceItems[$index]);
+
+        $this->serviceItems = array_values($this->serviceItems);
+        $this->availableStaffList = array_values($this->availableStaffList);
+
+        $this->success('Serviço removido com sucesso!');
+    }
+
     protected function checkStaffScheduleConflict($staffId, $start, $end)
     {
         $conflictingServiceItem = AppointmentServiceItem::where('staff_id', $staffId)
